@@ -32,6 +32,10 @@ python manage.py runserver
 ### ✅ **الخطوة 5: إضافة `.gitignore`**
 لمنع رفع ملفات غير ضرورية، أنشئ ملف `.gitignore` يحتوي:
 
+
+
+
+![لوحة التحكم](لموقع.png)
 ```gitignore
 # Python
 __pycache__/
