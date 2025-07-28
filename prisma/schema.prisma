@@ -1,0 +1,317 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management Models
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  role      UserRole @default(CLIENT)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  lawyer    Lawyer?
+  client    Client?
+  employee  Employee?
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  LAWYER
+  EMPLOYEE
+  CLIENT
+}
+
+model Lawyer {
+  id           String  @id @default(cuid())
+  userId       String  @unique
+  licenseNo    String  @unique
+  specialties  String
+  country      String
+  workArea     String
+  experience   Int?
+  bio          String?
+  avatar       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  cases        Case[]
+  appointments Appointment[]
+  contracts    Contract[]
+
+  @@map("lawyers")
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  nationalId  String?  @unique
+  address     String?
+  dateOfBirth DateTime?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  cases       Case[]
+  appointments Appointment[]
+  contracts   Contract[]
+  invoices    Invoice[]
+
+  @@map("clients")
+}
+
+model Employee {
+  id       String      @id @default(cuid())
+  userId   String      @unique
+  position String
+  salary   Float?
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("employees")
+}
+
+// Case Management Models
+model Case {
+  id          String     @id @default(cuid())
+  caseNumber  String     @unique
+  title       String
+  description String?
+  caseType    CaseType
+  status      CaseStatus @default(OPEN)
+  court       String?
+  opponent    String?
+  startDate   DateTime   @default(now())
+  endDate     DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  lawyerId    String
+  lawyer      Lawyer     @relation(fields: [lawyerId], references: [id])
+  clientId    String
+  client      Client     @relation(fields: [clientId], references: [id])
+
+  sessions    Session[]
+  documents   Document[]
+
+  @@map("cases")
+}
+
+enum CaseType {
+  CIVIL
+  CRIMINAL
+  COMMERCIAL
+  FAMILY
+  ADMINISTRATIVE
+  LABOR
+  OTHER
+}
+
+enum CaseStatus {
+  OPEN
+  CLOSED
+  SUSPENDED
+  APPEALED
+}
+
+model Session {
+  id          String      @id @default(cuid())
+  caseId      String
+  sessionDate DateTime
+  sessionTime String?
+  court       String?
+  notes       String?
+  outcome     String?
+  nextDate    DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  case        Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Document {
+  id          String       @id @default(cuid())
+  caseId      String?
+  contractId  String?
+  title       String
+  description String?
+  fileName    String
+  fileUrl     String
+  fileType    String
+  fileSize    Int?
+  uploadedAt  DateTime     @default(now())
+
+  case        Case?        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  contract    Contract?    @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+// Appointment Management
+model Appointment {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  location    String?
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  lawyerId    String
+  lawyer      Lawyer            @relation(fields: [lawyerId], references: [id])
+  clientId    String?
+  client      Client?           @relation(fields: [clientId], references: [id])
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+// Contract Management
+model Contract {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  contractType ContractType
+  status      ContractStatus @default(DRAFT)
+  startDate   DateTime?
+  endDate     DateTime?
+  amount      Float?
+  terms       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  lawyerId    String
+  lawyer      Lawyer         @relation(fields: [lawyerId], references: [id])
+  clientId    String
+  client      Client         @relation(fields: [clientId], references: [id])
+
+  documents   Document[]
+
+  @@map("contracts")
+}
+
+enum ContractType {
+  POWER_OF_ATTORNEY
+  LEGAL_CONSULTATION
+  REPRESENTATION
+  OTHER
+}
+
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  TERMINATED
+}
+
+// Invoice and Payment Management
+model Invoice {
+  id          String        @id @default(cuid())
+  invoiceNumber String      @unique
+  title       String
+  description String?
+  amount      Float
+  taxAmount   Float?        @default(0)
+  totalAmount Float
+  dueDate     DateTime
+  status      InvoiceStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id])
+
+  payments    Payment[]
+
+  @@map("invoices")
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  invoiceId     String
+  amount        Float
+  paymentMethod PaymentMethod
+  paymentDate   DateTime      @default(now())
+  notes         String?
+  createdAt     DateTime      @default(now())
+
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CREDIT_CARD
+  CHECK
+  OTHER
+}
+
+// AI Assistant Models
+model AIAnalysis {
+  id          String   @id @default(cuid())
+  caseId      String?
+  query       String
+  response    String
+  analysisType String
+  createdAt   DateTime @default(now())
+
+  @@map("ai_analyses")
+}
+
+model LegalTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  templateType String
+  content     String
+  variables   String[] // JSON array of variable names
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legal_templates")
+}

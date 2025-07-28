@@ -1,102 +1,126 @@
-import Image from "next/image";
+import { Scale, Users, Calendar, FileText, Phone, Mail, MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" dir="rtl">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div className="flex items-center">
+              <Scale className="h-8 w-8 text-blue-600 ml-3" />
+              <h1 className="text-2xl font-bold text-gray-900">نظام إدارة المكتب القانوني</h1>
+            </div>
+            <nav className="hidden md:flex space-x-8 space-x-reverse">
+              <a href="#about" className="text-gray-700 hover:text-blue-600">من نحن</a>
+              <a href="#services" className="text-gray-700 hover:text-blue-600">خدماتنا</a>
+              <a href="#contact" className="text-gray-700 hover:text-blue-600">اتصل بنا</a>
+              <Link href="/auth/login" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                تسجيل الدخول
+              </Link>
+            </nav>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            نظام إدارة المكاتب القانونية
+            <span className="block text-blue-600">الحل الشامل</span>
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            منصة شاملة لإدارة القضايا والعملاء والمواعيد والمستندات القانونية بكفاءة عالية
+          </p>
+          <div className="flex justify-center">
+            <Link href="/auth/register" className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+              إنشاء حساب
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">خدماتنا</h3>
+            <p className="text-xl text-gray-600">حلول شاملة لجميع احتياجات مكتبك القانوني</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl">
+              <FileText className="h-12 w-12 text-blue-600 mb-4" />
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">إدارة القضايا</h4>
+              <p className="text-gray-600">تتبع شامل لجميع القضايا مع إدارة الجلسات والمستندات والمراحل القانونية</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-xl">
+              <Users className="h-12 w-12 text-green-600 mb-4" />
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">إدارة العملاء</h4>
+              <p className="text-gray-600">قاعدة بيانات شاملة للعملاء مع تتبع التفاعلات والمراسلات</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-xl">
+              <Calendar className="h-12 w-12 text-purple-600 mb-4" />
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">جدولة المواعيد</h4>
+              <p className="text-gray-600">نظام متقدم لجدولة المواعيد والاجتماعات مع التذكيرات التلقائية</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <Scale className="h-8 w-8 text-blue-400 ml-3" />
+                <h3 className="text-xl font-bold">نظام إدارة المكتب القانوني</h3>
+              </div>
+              <p className="text-gray-400">
+                نظام شامل لإدارة المكاتب القانونية مع أحدث التقنيات والأدوات المتطورة
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold mb-4">روابط سريعة</h4>
+              <ul className="space-y-2">
+                <li><Link href="/auth/login" className="text-gray-400 hover:text-white">تسجيل الدخول</Link></li>
+                <li><Link href="/auth/register" className="text-gray-400 hover:text-white">إنشاء حساب</Link></li>
+                <li><a href="#about" className="text-gray-400 hover:text-white">من نحن</a></li>
+                <li><a href="#services" className="text-gray-400 hover:text-white">خدماتنا</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold mb-4">تواصل معنا</h4>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <Phone className="h-5 w-5 text-blue-400 ml-2" />
+                  <span className="text-gray-400">+966 50 123 4567</span>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="h-5 w-5 text-blue-400 ml-2" />
+                  <span className="text-gray-400">info@legaloffice.com</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="h-5 w-5 text-blue-400 ml-2" />
+                  <span className="text-gray-400">الرياض، المملكة العربية السعودية</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024  ل حمدو مكتب المحاماة الذكي. جميع الحقوق محفوظة.
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
